@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet logicalFilePath="3-insert-citizens"
+               id="3-insert-citizens" author="maria">
+        <insert tableName="citizen_model3">
+            <column  name="first_name"  value="Java"/>
+            <column  name="second_name"  value="Joshua"/>
+            <column  name="passport"  value="2018"/>
+            <column  name="birthdate"  valueDate="2020-01-01"/>
+            <column  name="city"  value="Moscow"/>
+            <column  name="country"  value="Russia"/>
+        </insert>
+
+    </changeSet>
+
+
+</databaseChangeLog>

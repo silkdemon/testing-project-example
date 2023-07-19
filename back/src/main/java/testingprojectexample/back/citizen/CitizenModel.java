@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 @Data
 @Entity
-@Table
+@Table(name = "citizen_model3")
 public class CitizenModel {
     @Id
     @SequenceGenerator(name = "citizen_sequence",
@@ -19,12 +19,26 @@ public class CitizenModel {
     )
     private Long id;
 
+    @Column(name = "first_name")
     private String firstName;
+
+    @Column(name = "second_name")
     private String secondName;
+
+    @Column
     private String passport;
+
+    @Column
     private LocalDate birthdate;
+
+    @Column
     private String city;
+
+    @Column
     private String country;
+
+    public CitizenModel() {
+    }
 
     public CitizenModel(String firstName, String secondName, String passport, LocalDate birthdate, String city, String country) {
         this.firstName = firstName;
