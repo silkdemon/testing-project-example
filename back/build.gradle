@@ -6,7 +6,7 @@ plugins {
 
 def lombokVersion = '1.18.28'
 
-group = 'testing-project-example'
+group = 'testingprojectexample'
 version = '0.0.1-SNAPSHOT'
 
 java {
@@ -23,7 +23,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.postgresql:postgresql:42.6.0'
     implementation group: 'org.liquibase', name: 'liquibase-core', version: '4.23.0'
-
+    testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.24.2'
 
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
@@ -32,7 +32,6 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
-
 springBoot {
-    mainClass = 'testingprojectexample.back.BackApplication.java'
+    mainClass = 'testingprojectexample.back.BackApplication'
 }

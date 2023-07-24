@@ -14,7 +14,7 @@ COPY . .
 
 # actual container
 FROM eclipse-temurin:17-jre-alpine
-ENV ARTIFACT_NAME=*.jar
+ENV ARTIFACT_NAME=back-0.0.1-SNAPSHOT.jar
 ENV APP_HOME=/usr/app/
 
 WORKDIR $APP_HOME

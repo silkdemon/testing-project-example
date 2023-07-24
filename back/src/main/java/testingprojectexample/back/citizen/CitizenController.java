@@ -1,10 +1,15 @@
 package testingprojectexample.back.citizen;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import testingprojectexample.back.citizen.exception_handling.CitizenIncorrectData;
+import testingprojectexample.back.citizen.exception_handling.CitizenNotFoundException;
 
-import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "api/v1/citizen")
@@ -24,6 +29,16 @@ public class CitizenController {
 
     }
 
+    @GetMapping(path = "{citizenId}")
+    public Optional<CitizenModel> getCitizenById(@PathVariable("citizenId") Long citizenId) {
+        Optional<CitizenModel> citizen = citizenService.getCitizenById(citizenId);
+        if (!citizen.isPresent()) {
+            throw new CitizenNotFoundException("Citizen with id " + citizenId + " does not exists");
+        } else {
+            return citizen;
+        }
+    }
+
     @PostMapping
     public void registerNewCitizen(@RequestBody CitizenModel citizen) {
         citizenService.addNewCitizen(citizen);
@@ -35,13 +50,8 @@ public class CitizenController {
     }
 
     @PutMapping(path = "{citizenId}")
-    public void updateCitizen(@PathVariable("citizenId") Long citizenId,
-                              @RequestParam(required = false) String firstName,
-                              @RequestParam(required = false) String secondName,
-                              @RequestParam(required = false) String passport,
-                              @RequestParam(required = false) LocalDate birthdate,
-                              @RequestParam(required = false) String city,
-                              @RequestParam(required = false) String country) {
-        citizenService.updateCitizen(citizenId, firstName, secondName, passport, birthdate, city, country);
+    public CitizenModel updateCitizen(@RequestBody CitizenModel citizen, @PathVariable("citizenId") Long citizenId) {
+        citizenService.updateCitizen(citizenId, citizen.getFirstName(), citizen.getSecondName(), citizen.getPassport(), citizen.getBirthdate(), citizen.getCity(), citizen.getCountry());
+        return citizen;
     }
 }

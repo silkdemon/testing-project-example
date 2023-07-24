@@ -10,12 +10,12 @@ import java.time.LocalDate;
 @Table(name = "citizen_model3")
 public class CitizenModel {
     @Id
-    @SequenceGenerator(name = "citizen_sequence",
-            sequenceName = "citizen_sequence",
+    @SequenceGenerator(name = "citizen_model3_id_seq",
+            sequenceName = "citizen_model3_id_seq",
             allocationSize = 1)
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "citizen_sequence"
+            generator = "citizen_model3_id_seq"
     )
     private Long id;
 
@@ -26,7 +26,7 @@ public class CitizenModel {
     private String secondName;
 
     @Column
-    private String passport;
+    private Integer passport;
 
     @Column
     private LocalDate birthdate;
@@ -40,7 +40,7 @@ public class CitizenModel {
     public CitizenModel() {
     }
 
-    public CitizenModel(String firstName, String secondName, String passport, LocalDate birthdate, String city, String country) {
+    public CitizenModel(String firstName, String secondName, Integer passport, LocalDate birthdate, String city, String country) {
         this.firstName = firstName;
         this.secondName = secondName;
         this.passport = passport;
