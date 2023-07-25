@@ -13,9 +13,12 @@ import testingprojectexample.back.citizen.CitizenService;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -40,8 +43,6 @@ class CitizenServiceTest {
 
     @Test
     void shouldGetAllCitizens() {
-//        citizenService.getCitizens();
-
         ArrayList<CitizenModel> citizens = new ArrayList<>();
         citizens.add(citizen);
         when(citizenRepository.findAll()).thenReturn(citizens);
@@ -60,11 +61,32 @@ class CitizenServiceTest {
     }
 
     @Test
-    void updateCitizen() {
+    void shouldGetCitizenById() {
+        when(citizenRepository.findById(anyLong())).thenReturn(Optional.of(citizen));
+
+        Optional<CitizenModel> foundCitizen = citizenService.getCitizenById(1L);
+        assertThat(foundCitizen).isNotNull();
     }
 
     @Test
-    void deleteCitizen() {
+    void shouldUpdateCitizen() {
+        when(citizenRepository.findById(1L)).thenReturn(Optional.ofNullable(citizen));
+        citizen.setCountry("USA");
+
+        CitizenModel updatedCitizen = citizenService.updateCitizen(1L, citizen).get();
+        assertThat(updatedCitizen.getCountry()).isEqualTo("USA");
+    }
+
+    @Test
+    void shouldDeleteCitizen() {
+        when(citizenRepository.existsById(1L)).thenReturn(true);
+        citizenService.deleteCitizen(1L);
+        verify(citizenRepository).deleteById(1L);
+    }
+
+    @Test
+    void shouldThrowExceptionWhenDeleteCitizenIfItsNotExist() {
+        assertThatThrownBy(() -> citizenService.deleteCitizen(1L)).isInstanceOf(IllegalStateException.class);
     }
 
     private CitizenModel citizen = new CitizenModel("Bart",
