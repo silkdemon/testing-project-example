@@ -2,7 +2,6 @@ package testingprojectexample.back.citizen;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import testingprojectexample.back.citizen.exception_handling.CitizenIncorrectData;
@@ -25,8 +24,6 @@ public class CitizenController {
     @GetMapping
     public List<CitizenModel> getCitizens() {
         return citizenService.getCitizens();
-
-
     }
 
     @GetMapping(path = "{citizenId}")
@@ -40,18 +37,38 @@ public class CitizenController {
     }
 
     @PostMapping
-    public void registerNewCitizen(@RequestBody CitizenModel citizen) {
+    public CitizenModel registerNewCitizen(@RequestBody CitizenModel citizen) {
         citizenService.addNewCitizen(citizen);
+        return citizen;
     }
 
     @DeleteMapping(path = "{citizenId}")
     public void deleteCitizen(@PathVariable("citizenId") Long citizenId) {
+        Optional<CitizenModel> citizen = citizenService.getCitizenById(citizenId);
+        if (!citizen.isPresent()) {
+            throw new CitizenNotFoundException("Citizen with id " + citizenId + " does not exists");
+        }
         citizenService.deleteCitizen(citizenId);
     }
 
     @PutMapping(path = "{citizenId}")
-    public CitizenModel updateCitizen(@RequestBody CitizenModel citizen, @PathVariable("citizenId") Long citizenId) {
-        citizenService.updateCitizen(citizenId, citizen.getFirstName(), citizen.getSecondName(), citizen.getPassport(), citizen.getBirthdate(), citizen.getCity(), citizen.getCountry());
+    public CitizenModel updateCitizen(@PathVariable("citizenId") Long citizenId, @RequestBody CitizenModel citizen) {
+        Optional<CitizenModel> foundCitizen = citizenService.getCitizenById(citizenId);
+        if (!foundCitizen.isPresent()) {
+            throw new CitizenNotFoundException("Citizen with id " + citizenId + " does not exists");
+        }
+        citizenService.updateCitizen(citizenId, citizen);
         return citizen;
     }
+
+
+    @ExceptionHandler
+    public ResponseEntity<CitizenIncorrectData> handleException(
+            CitizenNotFoundException ex
+    ) {
+        CitizenIncorrectData data = new CitizenIncorrectData();
+        data.setInfo(ex.getMessage());
+        return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
+    }
 }
+
