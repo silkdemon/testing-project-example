@@ -52,13 +52,12 @@ public class CitizenController {
     }
 
     @PutMapping(path = "{citizenId}")
-    public CitizenModel updateCitizen(@PathVariable("citizenId") Long citizenId, @RequestBody CitizenModel citizen) {
+    public Optional<CitizenDTO> updateCitizen(@PathVariable("citizenId") Long citizenId, @RequestBody CitizenModel citizen) {
         Optional<CitizenModel> foundCitizen = citizenService.getCitizenById(citizenId);
         if (!foundCitizen.isPresent()) {
             throw new CitizenNotFoundException("Citizen with id " + citizenId + " does not exists");
         }
-        citizenService.updateCitizen(citizenId, citizen);
-        return citizen;
+        return citizenService.updateCitizen(citizenId, citizen);
     }
 
 

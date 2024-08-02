@@ -1,12 +1,12 @@
 package testingprojectexample.back.citizen.unit;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import testingprojectexample.back.citizen.CitizenDTO;
 import testingprojectexample.back.citizen.CitizenModel;
 import testingprojectexample.back.citizen.CitizenRepository;
 import testingprojectexample.back.citizen.CitizenService;
@@ -24,7 +24,6 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class CitizenServiceTest {
-
 
     private CitizenService citizenService;
 
@@ -58,22 +57,23 @@ class CitizenServiceTest {
         CitizenModel savedCitizen = citizenService.addNewCitizen(citizen);
 
         assertThat(savedCitizen).isNotNull();
+        assertThat(savedCitizen.getFirstName()).isEqualTo(citizen.getFirstName());
     }
 
     @Test
     void shouldGetCitizenById() {
-        when(citizenRepository.findById(anyLong())).thenReturn(Optional.of(citizen));
-
+        when(citizenRepository.findById(anyLong())).thenReturn(Optional.ofNullable(citizen));
         Optional<CitizenModel> foundCitizen = citizenService.getCitizenById(1L);
         assertThat(foundCitizen).isNotNull();
+        assertThat(foundCitizen.get().getFirstName()).isEqualTo(citizen.getFirstName());
     }
 
     @Test
     void shouldUpdateCitizen() {
-        when(citizenRepository.findById(1L)).thenReturn(Optional.ofNullable(citizen));
+        when(citizenRepository.findById(anyLong())).thenReturn(Optional.ofNullable(citizen));
         citizen.setCountry("USA");
 
-        CitizenModel updatedCitizen = citizenService.updateCitizen(1L, citizen).get();
+        CitizenDTO updatedCitizen = citizenService.updateCitizen(1L, citizen).get();
         assertThat(updatedCitizen.getCountry()).isEqualTo("USA");
     }
 

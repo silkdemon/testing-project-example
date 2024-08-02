@@ -21,8 +21,7 @@ public class CitizenService {
     }
 
     public Optional<CitizenModel> getCitizenById(Long citizenId) {
-        Optional<CitizenModel> citizen = citizenRepository.findById(citizenId);
-        return citizen;
+        return citizenRepository.findById(citizenId);
     }
 
     public CitizenModel addNewCitizen(CitizenModel citizen) {
@@ -31,7 +30,7 @@ public class CitizenService {
     }
 
     @Transactional
-    public Optional<CitizenModel> updateCitizen(Long id, CitizenModel updatedCitizen) {
+    public Optional<CitizenDTO> updateCitizen(Long id, CitizenModel updatedCitizen) {
         return citizenRepository.findById(id).map(existingCitizen -> {
             existingCitizen.setFirstName(updatedCitizen.getFirstName());
             existingCitizen.setSecondName(updatedCitizen.getSecondName());
@@ -39,7 +38,16 @@ public class CitizenService {
             existingCitizen.setBirthdate(updatedCitizen.getBirthdate());
             existingCitizen.setCity(updatedCitizen.getCity());
             existingCitizen.setCountry(updatedCitizen.getCountry());
-            return existingCitizen;
+            // Convert to DTO
+            CitizenDTO citizenDTO = new CitizenDTO();
+            citizenDTO.setFirstName(existingCitizen.getFirstName());
+            citizenDTO.setSecondName(existingCitizen.getSecondName());
+            citizenDTO.setPassport(existingCitizen.getPassport());
+            citizenDTO.setBirthdate(existingCitizen.getBirthdate());
+            citizenDTO.setCity(existingCitizen.getCity());
+            citizenDTO.setCountry(existingCitizen.getCountry());
+
+            return citizenDTO;
         });
     }
 
