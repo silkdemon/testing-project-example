@@ -1,6 +1,7 @@
 package testingprojectexample.back.citizen.integration;
 
 import io.restassured.RestAssured;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -52,7 +53,7 @@ public class CitizenITest {
     }
 
     @Test
-    void test(){
-        postgres.isRunning();
+    void should_run_postgres() {
+        Assertions.assertThat(postgres.isRunning()).isTrue();
     }
 }

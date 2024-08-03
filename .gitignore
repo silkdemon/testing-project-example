@@ -35,3 +35,5 @@ out/
 
 ### VS Code ###
 .vscode/
+
+back/src/main/resources/testcontainers.properties
