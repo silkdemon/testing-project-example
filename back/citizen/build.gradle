@@ -1,0 +1,43 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.1.1'
+    id 'io.spring.dependency-management' version '1.1.0'
+}
+
+def lombokVersion = '1.18.28'
+
+group = 'testingprojectexample'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    sourceCompatibility = '17'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.postgresql:postgresql:42.6.0'
+    implementation group: 'org.liquibase', name: 'liquibase-core', version: '4.23.0'
+    implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.15.2'
+
+    testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.24.2'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation group: 'org.testcontainers', name: 'testcontainers', version: '1.20.0'
+    testImplementation group: 'org.testcontainers', name: 'postgresql', version: '1.20.0'
+    testImplementation group: 'org.testcontainers', name: 'junit-jupiter', version: '1.20.0'
+    testImplementation group: 'io.rest-assured', name: 'rest-assured', version: '5.5.0'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+springBoot {
+    mainClass = 'testingprojectexample.back.BackApplication'
+}
